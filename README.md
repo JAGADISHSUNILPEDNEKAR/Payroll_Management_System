@@ -12,17 +12,17 @@ A terminal-based Payroll Management System built using **COBOL**, designed to he
 
 - [🚀 Features](#-features)
 - [📂 Project Structure](#-project-structure)
-- [🏗️ System Architecture](#-system-architecture)
+- [🏗️ System Architecture](#️-system-architecture)
 - [📊 Salary Calculation](#-salary-calculation)
 - [🔧 Requirements](#-requirements)
-- [⚙️ Installation & Running](#️-installation--running)
+- [⚙ Installation & Running](#-installation--running)
 - [💻 Usage](#-usage)
 - [📸 Screenshots](#-screenshots)
-- [🗂️ Sample Data](#-sample-data)
+- [🗂️ Sample Data](#️-sample-data)
 - [✅ Future Enhancements](#-future-enhancements)
-- [🛠️ Troubleshooting](#-troubleshooting)
+- [🛠 Troubleshooting](#-troubleshooting)
 - [📃 License](#-license)
-- [🙋‍♂️ Support](#-support)
+- [🙋‍♂ Support](#-support)
 
 ---
 
@@ -42,35 +42,36 @@ A terminal-based Payroll Management System built using **COBOL**, designed to he
 
 | File / Folder         | Description                               |
 |------------------------|-------------------------------------------|
-| `main.cbl`             | Main menu and navigation logic            |
-| `employee.cbl`         | Employee CRUD operations                  |
-| `payroll.cbl`          | Salary calculation logic                  |
-| `report.cbl`           | Report generation & CSV export            |
-| `auth.cbl`             | Admin authentication module               |
-| `employee.dat`         | Flat file storing employee records        |
-| `payroll.dat`          | Flat file storing payroll transactions    |
-| `reports.txt`          | Output text report                        |
-| `employee_export.csv`  | Exported employee data (CSV)              |
-| `payroll_export.csv`   | Exported payroll data (CSV)               |
+| payroll.cbl          | Complete COBOL program (all modules integrated) |
+| employee.dat         | Flat file storing employee records        |
+| payroll.dat          | Flat file storing payroll transactions    |
+| reports.txt          | Output text report                        |
+| scripts/             | Installation and test scripts             |
+| employee_export.csv  | Exported employee data (CSV)              |
+| payroll_export.csv   | Exported payroll data (CSV)               |
 
 ---
 
 ## 🏗️ System Architecture
 
+**Implementation:** Single COBOL file (payroll.cbl) with integrated modules
+
+**Module Structure:**
 - **Main Menu** – CLI with menu-driven options  
 - **Authentication** – Validates admin access  
 - **Employee Module** – Add/Edit/Delete/Search  
 - **Payroll Module** – Salary computation logic  
-- **Reporting Module** – Generates `.txt` and `.csv` reports  
+- **Reporting Module** – Generates .txt and .csv reports  
 - **File System** – Stores data using flat files  
 
+**Note:** All functionality is in one COBOL program, not separate files.
+
 **Data Flow:**  
-`Admin Login → Manage Employees → Process Payroll → Generate Reports → Export Data`
+`Admin Login → Main Menu → Select Operation → Process Request → Update Files → Display Results`
 
 ---
 
 ## 📊 Salary Calculation
-
 
 Gross Salary   = Base Salary + (Overtime Hours × Rate) + Bonus  
 Tax (10%)      = 0.10 × Gross Salary  
@@ -91,6 +92,7 @@ Net Salary     = Gross Salary - Tax - Deductions
 ### Software
 
 * COBOL Compiler (GnuCOBOL recommended)
+* Git (for cloning the repository)
 * Terminal / Command Prompt
 * Text Editor (VS Code, Vim, Nano)
 
@@ -101,7 +103,20 @@ Net Salary     = Gross Salary - Tax - Deductions
 
 ---
 
-## ⚙️ Installation & Running
+## ⚙ Installation & Running
+
+### 0️⃣ Clone the Repository (REQUIRED FIRST STEP)
+
+```bash
+# Clone the repository
+git clone https://github.com/JAGADISHSUNILPEDNEKAR/Payroll_Management_System.git
+
+# Navigate to project directory
+cd Payroll_Management_System
+
+# Verify you have the source code
+ls -la payroll.cbl
+```
 
 ### 1️⃣ Install GnuCOBOL
 
@@ -118,17 +133,23 @@ sudo apt install gnucobol
 brew install gnu-cobol
 ```
 
-**Windows**
+**Windows**  
 Download GnuCOBOL from [https://gnucobol.sourceforge.io/](https://gnucobol.sourceforge.io/)
 
 ---
 
-### 2️⃣ Setup Files
+### 2️⃣ Setup Data Files
 
 ```bash
-mkdir payroll-system
-cd payroll-system
+# Create data files if not present
 touch employee.dat payroll.dat reports.txt
+
+# Add sample employee data
+cat > employee.dat << 'EOF'
+10001John Smith                  IT Department        Software Engineer        75000.00
+10002Jane Doe                    HR Department        HR Manager               68000.00
+10003Bob Johnson                 Finance Department   Financial Analyst        62000.00
+EOF
 ```
 
 ---
@@ -136,22 +157,40 @@ touch employee.dat payroll.dat reports.txt
 ### 3️⃣ Compile the COBOL Source
 
 ```bash
-cobc -x -o payroll main.cbl employee.cbl payroll.cbl report.cbl auth.cbl
+cobc -x -o payroll payroll.cbl
+```
+
+**Note:** You may see a warning about _FORTIFY_SOURCE - this is normal and can be ignored.
+
+For debugging mode:
+```bash
+cobc -x -g -o payroll payroll.cbl
+```
+
+To check syntax only:
+```bash
+cobc -fsyntax-only payroll.cbl
 ```
 
 ### 4️⃣ Run the Program
 
+**Linux/macOS:**
 ```bash
 ./payroll
+```
+
+**Windows:**
+```cmd
+payroll.exe
 ```
 
 ---
 
 ## 💻 Usage
 
-### 🛡️ Login
+### 🛡 Login
 
-```text
+```
 Username: admin  
 Password: payroll123
 ```
@@ -203,9 +242,8 @@ Net Salary: $68,920
 
 ## 📸 Screenshots
 
-<img width="1121" alt="Screenshot 2025-06-18 at 1 56 12 PM" src="https://github.com/user-attachments/assets/fdc9414c-1a54-47bc-9d1f-7d787bfbd786" />
-<img width="1121" alt="Screenshot 2025-06-18 at 1 56 26 PM" src="https://github.com/user-attachments/assets/27676b4e-4148-45fa-93bc-4d1e00fb9418" />
-
+<img width="1121" alt="Screenshot 2025-06-18 at 1 56 12 PM" src="https://github.com/user-attachments/assets/fdc9414c-1a54-47bc-9d1f-7d787bfbd786" />
+<img width="1121" alt="Screenshot 2025-06-18 at 1 56 26 PM" src="https://github.com/user-attachments/assets/27676b4e-4148-45fa-93bc-4d1e00fb9418" />
 
 ```
 Payroll Report - December 2025
@@ -217,22 +255,22 @@ Gross: $76,800.00 | Net: $68,920.00
 
 ## 🗂️ Sample Data
 
-### `employee.dat`
+### employee.dat
 
-```text
+```
 10001John Smith                  IT                  Software Engineer        75000.00
 10002Jane Doe                    HR                  HR Manager               68000.00
 ```
 
-### `payroll.dat`
+### payroll.dat
 
-```text
+```
 10001,22,8,1000,200,7680,76800,68920,12,2025
 ```
 
 ---
 
-## ⚙️ Quick Start Installation
+## ⚙ Quick Start Installation
 
 ### 🚀 Automated Installation (Recommended)
 
@@ -290,11 +328,19 @@ This will run comprehensive tests to ensure:
 
 ---
 
-## ⚙️ Manual Installation
+## ⚙ Manual Installation
 
 If you prefer to install manually or the automated script doesn't work:
 
-### 1️⃣ Install GnuCOBOL
+### 1️⃣ Clone the Repository
+
+```bash
+# Clone from GitHub
+git clone https://github.com/JAGADISHSUNILPEDNEKAR/Payroll_Management_System.git
+cd Payroll_Management_System
+```
+
+### 2️⃣ Install GnuCOBOL
 
 **Ubuntu/Debian**
 ```bash
@@ -320,13 +366,10 @@ brew install gnu-cobol
 sudo yum install gnucobol
 ```
 
-### 2️⃣ Setup Files
+### 3️⃣ Setup Data Files
 
 ```bash
-# Create necessary directories
-mkdir -p scripts data
-
-# Create data files
+# Create data files if needed
 touch employee.dat payroll.dat reports.txt
 
 # Add sample employee data to employee.dat
@@ -339,11 +382,13 @@ cat > employee.dat << 'EOF'
 EOF
 ```
 
-### 3️⃣ Compile the COBOL Source
+### 4️⃣ Compile the COBOL Source
 
 ```bash
 cobc -x -o payroll payroll.cbl
 ```
+
+**Note:** You may see a warning about _FORTIFY_SOURCE - this is normal and can be ignored.
 
 For debugging mode:
 ```bash
@@ -355,7 +400,7 @@ To check syntax only:
 cobc -fsyntax-only payroll.cbl
 ```
 
-### 4️⃣ Run the Program
+### 5️⃣ Run the Program
 
 **Linux/macOS:**
 ```bash
@@ -369,9 +414,40 @@ payroll.exe
 
 ---
 
-## 🛠️ Comprehensive Troubleshooting
+## 🛠 Comprehensive Troubleshooting
 
 ### Installation Issues
+
+#### ❌ "cobc: payroll.cbl: No such file or directory"
+
+**Problem:** Source code file not found. This usually means the repository wasn't cloned.
+
+**Solutions:**
+
+1. **Verify you cloned the repository:**
+   ```bash
+   ls -la payroll.cbl
+   ```
+   If file doesn't exist, you didn't clone the repo.
+
+2. **Clone the repository:**
+   ```bash
+   cd ~
+   git clone https://github.com/JAGADISHSUNILPEDNEKAR/Payroll_Management_System.git
+   cd Payroll_Management_System
+   ls -la payroll.cbl  # Should show the file now
+   ```
+
+3. **Check you're in correct directory:**
+   ```bash
+   pwd
+   # Should show: .../Payroll_Management_System
+   ```
+
+4. **Compile again:**
+   ```bash
+   cobc -x -o payroll payroll.cbl
+   ```
 
 #### ❌ "cobc: command not found" or "GnuCOBOL not found"
 
@@ -909,23 +985,25 @@ ls -la *.dat
 - [COBOL Standards](https://www.iso.org/standard/74527.html)
 - [COBOL Tutorial](https://www.tutorialspoint.com/cobol/index.htm)
 
+---
+
 ## ✅ Future Enhancements
 
 * 🔐 Role-based Authentication
 * 📊 Graphical Report Output (CSV/HTML)
 * 🌍 Web Interface using COBOL-Web bridge
-* 🗃️ VSAM / Indexed File / SQL DB Integration
+* 🗃 VSAM / Indexed File / SQL DB Integration
 * 🔁 Backup & Restore functionality
-* 🛡️ Better Input Validation & Logging
+* 🛡 Better Input Validation & Logging
 
 ---
 
-## 🛠️ Troubleshooting
+## 🛠 Common Issues Quick Reference
 
 | Issue               | Fix                                                                   |
 | ------------------- | --------------------------------------------------------------------- |
 | ❌ Compilation Error | Check COBOL syntax and ensure `IDENTIFICATION`, `PROCEDURE` divisions |
-| 🗂️ File Error      | Ensure `.dat` files exist and have correct permissions                |
+| 🗂 File Error      | Ensure `.dat` files exist and have correct permissions                |
 | 🧮 Wrong Output     | Validate inputs and verify salary formula                             |
 
 ---
@@ -936,16 +1014,13 @@ This project is licensed under the **MIT License** © 2025 **JAGADISH SUNIL PEDN
 
 ---
 
-## 🙋‍♂️ Support
+## 🙋‍♂ Support
 
 If you like this project, give it a ⭐ at [Payroll\_Management\_System](https://github.com/JAGADISHSUNILPEDNEKAR/Payroll_Management_System).
 For issues or suggestions, open an [Issue](https://github.com/JAGADISHSUNILPEDNEKAR/Payroll_Management_System/issues).
 
 ---
 
-📅 **Last Updated:** June 2025
-📦 **Version:** 1.0
+📅 **Last Updated:** June 2025  
+📦 **Version:** 1.0  
 🚀 **Status:** Production Ready
-
-
-
