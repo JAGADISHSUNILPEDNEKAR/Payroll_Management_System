@@ -51,6 +51,14 @@
            05 WS-TEMP-DEPT         PIC X(20).
            05 WS-TEMP-POS          PIC X(25).
            05 WS-TEMP-SALARY       PIC 9(7)V99.
+       01 WS-SEARCH-BY-NAME-VARS.
+           05 WS-SEARCH-CHOICE     PIC 9 VALUE 0.
+           05 WS-SEARCH-NAME       PIC X(30).
+           05 WS-SEARCH-NAME-LOWER PIC X(30).
+           05 WS-EMP-NAME-LOWER    PIC X(30).
+           05 WS-FOUND-COUNT       PIC 9(3) VALUE 0.
+           05 WS-SEARCH-LEN        PIC 99 VALUE 0.
+           05 WS-I                 PIC 99 VALUE 0.
        
        01 WS-PAYROLL-CALC.
            05 WS-CALC-OVERTIME-PAY PIC 9(6)V99.
@@ -161,7 +169,7 @@
                WHEN 1
                    PERFORM ADD-EMPLOYEE
                WHEN 2
-                   PERFORM SEARCH-EMPLOYEE
+                   PERFORM SEARCH-EMPLOYEE-MENU
                WHEN 3
                    PERFORM UPDATE-EMPLOYEE
                WHEN 4
@@ -229,7 +237,7 @@
            CLOSE EMPLOYEE-FILE
            MOVE 'N' TO WS-EOF.
        
-       SEARCH-EMPLOYEE.
+       SEARCH-EMPLOYEE-BY-ID.
            DISPLAY " "
            DISPLAY "========== SEARCH EMPLOYEE =========="
            DISPLAY "Enter Employee ID to search: " WITH NO ADVANCING
@@ -256,6 +264,88 @@
            
            CLOSE EMPLOYEE-FILE
            MOVE 'N' TO WS-EOF.
+       
+       SEARCH-EMPLOYEE-MENU.
+           DISPLAY " "
+           DISPLAY "========== SEARCH EMPLOYEE =========="
+           DISPLAY "1. Search by ID"
+           DISPLAY "2. Search by Name"
+           DISPLAY "3. Return to previous menu"
+           DISPLAY "====================================="
+           DISPLAY "Enter choice (1-3): " WITH NO ADVANCING
+           ACCEPT WS-SEARCH-CHOICE
+
+           EVALUATE WS-SEARCH-CHOICE
+                WHEN 1
+                    PERFORM SEARCH-EMPLOYEE-BY-ID
+                WHEN 2
+                    PERFORM SEARCH-EMPLOYEE-BY-NAME
+                WHEN 3
+                    CONTINUE
+                WHEN OTHER
+                    DISPLAY "Invalid choice."
+           END-EVALUATE.
+
+       SEARCH-EMPLOYEE-BY-NAME.
+           DISPLAY " "
+           DISPLAY "========== SEARCH EMPLOYEE BY NAME =========="
+           DISPLAY "Enter employee name (partial): " WITH NO ADVANCING
+           ACCEPT WS-SEARCH-NAME
+
+           MOVE 'N' TO WS-EOF
+           MOVE 0 TO WS-FOUND-COUNT
+           
+           MOVE FUNCTION LOWER-CASE(WS-SEARCH-NAME)
+                TO WS-SEARCH-NAME-LOWER
+
+           MOVE 0 TO WS-SEARCH-LEN
+           INSPECT FUNCTION REVERSE(WS-SEARCH-NAME-LOWER)
+                TALLYING WS-SEARCH-LEN
+                FOR LEADING SPACES
+                
+           COMPUTE WS-SEARCH-LEN = 30 - WS-SEARCH-LEN
+
+           IF WS-SEARCH-LEN > 0
+                OPEN INPUT EMPLOYEE-FILE
+                PERFORM UNTIL WS-EOF = 'Y'
+                    READ EMPLOYEE-FILE
+                        AT END
+                            MOVE 'Y' TO WS-EOF
+                        NOT AT END
+                            PERFORM CHECK-NAME-MATCH
+                    END-READ
+                END-PERFORM
+                CLOSE EMPLOYEE-FILE
+           END-IF
+           
+           IF WS-FOUND-COUNT = 0
+                DISPLAY "No employees found matching that name."
+           ELSE
+                DISPLAY "------------------------------------"
+                DISPLAY "Total found: " WS-FOUND-COUNT
+           END-IF
+           DISPLAY " ".
+
+       CHECK-NAME-MATCH.
+           MOVE FUNCTION LOWER-CASE(EMP-NAME) TO WS-EMP-NAME-LOWER
+           PERFORM VARYING WS-I FROM 1 BY 1
+                UNTIL WS-I > (30 - WS-SEARCH-LEN + 1)
+
+                IF WS-EMP-NAME-LOWER(WS-I : WS-SEARCH-LEN) =
+                   WS-SEARCH-NAME-LOWER(1 : WS-SEARCH-LEN)
+
+                   IF WS-FOUND-COUNT = 0
+                    DISPLAY " "
+                    DISPLAY "Found matching employees:"
+                    DISPLAY "------------------------------------"
+                   END-IF
+                   ADD 1 TO WS-FOUND-COUNT
+                   DISPLAY EMP-ID " | " EMP-NAME " | " EMP-DEPARTMENT
+
+                   EXIT PERFORM
+                END-IF
+           END-PERFORM.
+
        
        DISPLAY-EMPLOYEE-DETAILS.
            DISPLAY " "
