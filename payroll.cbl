@@ -291,6 +291,7 @@
        LIST-ALL-EMPLOYEES.
            DISPLAY " "
            DISPLAY "========== ALL EMPLOYEES =========="
+           MOVE 0 TO WS-TOTAL-EMPLOYEES
            OPEN INPUT EMPLOYEE-FILE
            PERFORM UNTIL WS-EOF = 'Y'
                READ EMPLOYEE-FILE
@@ -299,10 +300,13 @@
                    NOT AT END
                        DISPLAY EMP-ID " | " EMP-NAME " | " 
                                EMP-DEPARTMENT " | $" EMP-BASE-SALARY
+                        ADD 1 TO WS-TOTAL-EMPLOYEES
                END-READ
            END-PERFORM
            CLOSE EMPLOYEE-FILE
            MOVE 'N' TO WS-EOF
+           DISPLAY "==================================="
+           DISPLAY "Total Employees: " WS-TOTAL-EMPLOYEES
            DISPLAY "==================================="
            DISPLAY " ".
        
