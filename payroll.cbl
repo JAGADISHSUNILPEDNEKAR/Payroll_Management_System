@@ -316,6 +316,7 @@
                     END-READ
                 END-PERFORM
                 CLOSE EMPLOYEE-FILE
+                MOVE 'N' TO WS-EOF
            END-IF
            
            IF WS-FOUND-COUNT = 0
