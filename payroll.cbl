@@ -286,6 +286,11 @@
                     DISPLAY "Invalid choice."
            END-EVALUATE.
 
+       *>> Algorithm:
+       *>> 1. Accepts input name.
+       *>> 2. Calculates actual non-space length of input using REVERSE/INSPECT.
+       *>> 3. Performs case-insensitive partial match by checking all substring positions.
+       *>> 4. Displays all matching employee records found.
        SEARCH-EMPLOYEE-BY-NAME.
            DISPLAY " "
            DISPLAY "========== SEARCH EMPLOYEE BY NAME =========="
@@ -327,6 +332,8 @@
            END-IF
            DISPLAY " ".
 
+       *>> Performs a case-insensitive substring search (partial match).
+       *>> EMP-NAME is compared against WS-SEARCH-NAME-LOWER at every possible starting position (WS-I).
        CHECK-NAME-MATCH.
            MOVE FUNCTION LOWER-CASE(EMP-NAME) TO WS-EMP-NAME-LOWER
            PERFORM VARYING WS-I FROM 1 BY 1
