@@ -58,7 +58,7 @@
            05 WS-EMP-NAME-LOWER    PIC X(30).
            05 WS-FOUND-COUNT       PIC 9(3) VALUE 0.
            05 WS-SEARCH-LEN        PIC 99 VALUE 0.
-           05 WS-I                 PIC 99 VALUE 0.
+           05 WS-NAME-IDX          PIC 99 VALUE 0.
        
        01 WS-PAYROLL-CALC.
            05 WS-CALC-OVERTIME-PAY PIC 9(6)V99.
@@ -336,10 +336,10 @@
        *>> EMP-NAME is compared against WS-SEARCH-NAME-LOWER at every possible starting position (WS-I).
        CHECK-NAME-MATCH.
            MOVE FUNCTION LOWER-CASE(EMP-NAME) TO WS-EMP-NAME-LOWER
-           PERFORM VARYING WS-I FROM 1 BY 1
-                UNTIL WS-I > (30 - WS-SEARCH-LEN + 1)
+           PERFORM VARYING WS-NAME-IDX FROM 1 BY 1
+                UNTIL WS-NAME-IDX > (30 - WS-SEARCH-LEN + 1)
 
-                IF WS-EMP-NAME-LOWER(WS-I : WS-SEARCH-LEN) =
+                IF WS-EMP-NAME-LOWER(WS-NAME-IDX : WS-SEARCH-LEN) =
                    WS-SEARCH-NAME-LOWER(1 : WS-SEARCH-LEN)
 
                    IF WS-FOUND-COUNT = 0
