@@ -179,7 +179,7 @@
                WHEN 6
                    CONTINUE
                WHEN OTHER
-                   DISPLAY "Invalid choice."
+                   DISPLAY "❌ Invalid selection. Please enter a number between 1-4."
            END-EVALUATE.
        
        ADD-EMPLOYEE.
@@ -259,7 +259,7 @@
            END-PERFORM
            
            IF WS-FOUND = 'N'
-               DISPLAY "Employee not found."
+               DISPLAY "❌ Employee ID 12345 not found. Please check the ID and try again."
            END-IF
            
            CLOSE EMPLOYEE-FILE
@@ -523,7 +523,7 @@
                WHEN 5
                    CONTINUE
                WHEN OTHER
-                   DISPLAY "Invalid choice."
+                   DISPLAY "❌ Invalid selection. Please enter a number between 1-4."
            END-EVALUATE.
        
        MONTHLY-PAYROLL-REPORT.
